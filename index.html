@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Practice vue</title>
+	<link rel="stylesheet" type="text/css" href="css/bulma.css">
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body>
+	<div id="app">
+		<h1>{{title}}</h1>
+		<p>Message: {{message}}</p>
+		<input type="text" v-model='message' name="" placeholder="Message...">
+		<br>
+		<br>
+		<ul >
+			<li v-for="item in items" v-text='item'></li>
+		</ul>
+		<input type="text" @keyup.enter='addItem' v-model='newItem'  name="" placeholder="Add Item">
+		<br>
+		<button type="button" :title='getTitle'>Hover over me</button>
+		<br>
+		<h1 :class='{panel:toggleClass}' @click='toggleClass =!toggleClass' >Click to toggle class</h1>
+		<br>
+		<button type="button" :disabled="isDisabled">disable button</button>
+		<br>
+		normal: {{message}}
+		reverse: {{reverseMessage}}
+		<h2>Completed Tasks</h2>
+		<ul >
+			<li v-for="(task,index,key) in CompletedTasks"  :key='task.index'>			{{index}} {{task.description}}
+				<span><button type="button" @click='ToggleComplete(task.description)'>Toggle</button></span>
+			</li>
+
+		</ul>
+		<h2>Incompleted Tasks</h2>
+		<ul >
+			<li v-for="(task,index) in IncompletedTasks"  :key='task.index'>{{task.description}}
+			<span><button type="button" @click='ToggleComplete(task.description)'>Toggle</button></span>	
+			</li>
+		</ul>
+
+		<br>
+		<br>
+		<!--custom component -->
+		<task-list></task-list>
+		<single-post>
+			<h3>Post Title 1</h3>
+			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+			tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+			quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+			consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+			cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+			proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+		</single-post>
+		<single-post>
+			<h3>Post Title 2</h3>
+			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+			tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+			quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+			consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+			cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+			proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+		</single-post>
+		<single-post>
+			<h3>Post Title 3</h3>
+			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+			tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+			quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+			consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+			cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+			proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+		</single-post>
+
+		<!-- bulma practice -->
+		<vue-message title1="title for 1"  body1='body 1'></vue-message>
+		<vue-message title2="title for 2" body2='body 2'></vue-message>
+		<!-- vue modal section -->
+		<vue-modal v-if='showModal' @close="showModal = false"></vue-modal>
+		<button type="button" class="button is-info" @click="showModal= true">Show Modal</button>
+		<!-- vue tab section -->
+		<div class="container">
+			<vue-tabs>
+				<vue-tab name='About Us' :selected="true">
+					<h1>Here is the content of About us tab</h1>
+				</vue-tab>
+				<vue-tab name='Our Culture'>
+					<h1>Here is the content of Our Culture tab</h1>
+				</vue-tab>
+				<vue-tab name='Our Vision'>
+					<h1>Here is the content of Our Vision tab</h1>
+				</vue-tab>
+			</vue-tabs>
+		</div>
+	</div>
+
+	<script type="text/javascript" src="js/vue.js"></script>
+	<script type="text/javascript" src="js/custom.js"></script>
+</body>
+</html>
