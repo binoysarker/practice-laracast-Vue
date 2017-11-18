@@ -118,8 +118,8 @@ Vue.component('vue-tabs',{
 	<div>
 		<div class="tabs">
 		  <ul>
-		    <li v-for='tab in tabs'>
-		    	<a href="">{{tab.name}}</a>
+		    <li v-for='tab in tabs' :class="{'is-active':tab.isActive}">
+		    	<a :href="tab.href" @click="selectTab(tab)">{{tab.name}}</a>
 		    </li>
 		  </ul>
 		</div>
@@ -134,25 +134,98 @@ Vue.component('vue-tabs',{
 			tabs:[],
 		}
 	},
+
 	created(){
 		this.tabs = this.$children;
+	},
+	methods:{
+		selectTab(selectedTab){
+			this.tabs.forEach(tab => {
+				tab.isActive = (tab.name == selectedTab.name);
+			});
+		},
 	},
 });
 
 
 Vue.component('vue-tab',{
+	data(){
+		return{
+			isActive:false,
+		}
+	},
 	props:{
 		name:{
 			require:true
 		},
+		selected:{
+			default:false,
+		},
+	},
+	computed:{
+		href(){
+			// for example about-us
+			return '#' + this.name.toLowerCase();
+		},
 	},
 	template:`
-	<div>
+	<div v-show="isActive">
 		<slot></slot>
 		
 	</div>
 	`,
+	mounted(){
+		this.isActive = this.selected;
+	},
 });
+
+// new vue instance for siblings communication
+window.Event = new Vue();	
+
+Vue.component('cupon',{
+	template:`
+	<input type="text" placeholder='Enter your cupon' @blur='onCuponApplied' />
+	`,
+	methods:{
+		onCuponApplied(){
+			Event.$emit('applied');
+			// this.$emit('applied');
+			// alert('you have your cupon');
+		},
+	},
+});
+
+// new modal component section
+Vue.component('new-modal',{
+	template:`
+	<div class="modal is-active">
+	  <div class="modal-background"></div>
+	  <div class="modal-card">
+	    <header class="modal-card-head">
+	      <p class="modal-card-title">
+	      	<slot name='modal-title'></slot>
+	      </p>
+	      <button class="delete" aria-label="close" @click='close'></button>
+	    </header>
+	    <section class="modal-card-body">
+	      <slot></slot>
+	    </section>
+	    <footer class="modal-card-foot">
+	      <slot name='modal-footer'>
+					<button class="button is-primary">Okay</button>
+	      </slot>
+	    </footer>
+	  </div>
+	</div>
+	`,
+	methods:{
+		close(){
+			Event.$emit('closeModal');
+		},
+	},
+});
+
+
 var app = new Vue({
 	el:'#app',
 	data:{
@@ -171,6 +244,7 @@ var app = new Vue({
 		{description:'description5',completed:false},
 		],
 		showModal:false,
+		cuponApplied:false,
 
 	},
 	methods:{
@@ -181,6 +255,12 @@ var app = new Vue({
 		ToggleComplete(value){
 			var getTask = this.tasks.filter(task => task.description == value);
 			console.log(getTask[0].completed = !getTask[0].completed);
+		},
+		onCuponApplied(){
+			this.cuponApplied = true;
+		},
+		close(){
+			this.showModal = false;
 		},
 		
 		
@@ -195,5 +275,9 @@ var app = new Vue({
 		IncompletedTasks(){
 			return this.tasks.filter(task => !task.completed);
 		},
-	}
+	},
+	created(){
+		Event.$on('applied',() => alert("sibling is handling this event"));
+		Event.$on('closeModal',() => this.showModal = false);
+	},
 });

@@ -76,8 +76,8 @@
 		<vue-message title1="title for 1"  body1='body 1'></vue-message>
 		<vue-message title2="title for 2" body2='body 2'></vue-message>
 		<!-- vue modal section -->
-		<vue-modal v-if='showModal' @close="showModal = false"></vue-modal>
-		<button type="button" class="button is-info" @click="showModal= true">Show Modal</button>
+		<!-- <vue-modal v-if='showModal' @close="showModal = false"></vue-modal> -->
+		<!-- <button type="button" class="button is-info" @click="showModal= true">Show Modal</button> -->
 		<!-- vue tab section -->
 		<div class="container">
 			<vue-tabs>
@@ -92,6 +92,31 @@
 				</vue-tab>
 			</vue-tabs>
 		</div>
+		<br>
+		<br>
+
+		<!-- component communication -->
+		<cupon @applied='onCuponApplied'></cupon>
+		<h1 v-show='cuponApplied'>You have your cupon</h1>
+		<!-- named slot -->
+		<new-modal v-if='showModal'>
+			<template slot='modal-title'>Modal title</template>
+			<div class="container">
+				<h1 class="card-header-title">modal content header</h1>
+				<p class="has-text-centered">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+				tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+				quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+				consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+				cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+				proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+			</div>
+
+			<template slot='modal-footer'>
+				<button class="button is-success">Save changes</button>
+				<button class="button" @click='close'>Cancel</button>
+			</template>
+		</new-modal>
+		<button type="button" class="button is-primary" @click='showModal = true'>Show card modal</button>
 	</div>
 
 	<script type="text/javascript" src="js/vue.js"></script>
